@@ -16,18 +16,20 @@ export class TouchBarManager {
     if (this.buttons.length >= 7) return;
 
     this._renderButton(button).then(icon => {
-      const touchButton = new TouchBarButton({
-        icon: icon,
-        click: button._onClick.bind(button, {})
-      });
+      if (icon) {
+        const touchButton = new TouchBarButton({
+          icon: icon,
+          click: button._onClick.bind(button, {})
+        });
 
-      this.buttons.push({
-        priority: button.priority ? button.priority : 0,
-        touchButton,
-        group: button.group
-      });
+        this.buttons.push({
+          priority: button.priority ? button.priority : 0,
+          touchButton,
+          group: button.group
+        });
 
-      this.update();
+        this.update();
+      }
     });
   }
 
@@ -40,7 +42,7 @@ export class TouchBarManager {
     this.buttons = this.buttons.filter(button => button.group !== group);
     this.update();
   }
-  
+
   _renderButton (button) {
     return document.fonts.ready.then(() => {
       if (!(button.element instanceof HTMLElement)) return;
